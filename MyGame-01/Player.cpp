@@ -16,7 +16,7 @@ namespace
 	// プレイヤーのパラメータ
 	constexpr float kSpeed = 20.0f;
 	constexpr float kColRadius = 50.0f;
-	constexpr float kGravity = -5.0f;
+	constexpr float kGravity = -2.0f;
 
 	// セルのサイズ
 	constexpr float kCellSize = 210.0f;

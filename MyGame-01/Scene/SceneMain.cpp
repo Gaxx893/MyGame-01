@@ -18,12 +18,33 @@ SceneMain::SceneMain()
 	m_pPlayer = std::make_shared<Player>();
 }
 
+// 更新
 SceneBase* SceneMain::Update()
 {
 	m_pPlayer->Update();
 	m_pField->Update();
 	m_pCamera->Update();
 
+	CheckCollide();
+
+	// フェード処理
+	SceneBase::UpdateFade();
+	return this;
+}
+
+// 描画
+void SceneMain::Draw()
+{
+	m_pPlayer->Draw();
+	m_pField->Draw();
+
+	// フェード処理
+	SceneBase::DrawFade();
+}
+
+// 当たり判定確認
+void SceneMain::CheckCollide()
+{
 	// 地面とプレイヤーの当たり判定
 	for (auto& pModel : m_pField->GetModel())
 	{
@@ -42,20 +63,6 @@ SceneBase* SceneMain::Update()
 		if (isHit)
 		{
 			m_pPlayer->SetIsOnField(true);
-		//	printfDx("aaa\n");
 		}
 	}
-
-	// フェード処理
-	SceneBase::UpdateFade();
-	return this;
-}
-
-void SceneMain::Draw()
-{
-	m_pPlayer->Draw();
-	m_pField->Draw();
-
-	// フェード処理
-	SceneBase::DrawFade();
 }
