@@ -30,6 +30,8 @@ Player::Player()
 	m_data.animNo = kIdleAnimeNo;
 	m_data.isOnField = false;
 	m_data.velocity = 0.0f;
+	m_data.atkPos = VGet(0.0f, 0.0f, 0.0f);
+	m_data.color = 0xffffff;
 	//m_data.frameCount = 0;
 	//m_data.frameRate = 0.0f;
 	//m_data.dir = VGet(0, 0, 1);
@@ -176,6 +178,9 @@ void Player::Attack()
 {
 	if (Pad::isTrigger(PAD_INPUT_1))
 	{
+		// çUåÇÇµÇΩç¿ïWÇï€ë∂
+		m_data.atkPos = m_data.pos;
+
 		bool isAttackAnim = m_data.animNo == kAttackAnimeNo;
 		if (!isAttackAnim)
 		{

@@ -20,7 +20,7 @@ public:
 	void CheckCollide();	// 当たり判定確認
 
 private:
-	std::vector<std::shared_ptr<Player>> m_pPlayer;	// プレイヤーのポインタ
+	std::shared_ptr<Player> m_pPlayer;	// プレイヤーのポインタ
 	std::shared_ptr<Field> m_pField;	// 地面のポインタ
 	std::shared_ptr<Camera> m_pCamera;	// カメラのポインタ
 };

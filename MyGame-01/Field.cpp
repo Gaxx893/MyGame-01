@@ -16,14 +16,15 @@ namespace
     constexpr float kCellSize = 210.0f;
 }
 
-Field::Field()
+Field::Field(VECTOR PlayerattackPos) :
+    playerAttackPos(PlayerattackPos)
 {
     // 2次元vectorに要素を追加
+    m_field.push_back({ 2, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 0, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 0, 1, 1 });
+    m_field.push_back({ 1, 2, 1, 0, 1, 1 });
+    m_field.push_back({ 1, 2, 1, 0, 1, 1 });
     m_field.push_back({ 1, 1, 1, 0, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1 });
@@ -40,7 +41,7 @@ Field::Field()
         {
             for (int col = 0; col < numCols; col++)
             {
-                if (m_field[row][col] == 1)
+                if (m_field[row][col] != FieldState::NONE)
                 {
                     // セルの中央座標を計算
                     float x = col * kCellSize;
@@ -64,7 +65,38 @@ Field::~Field()
 
 void Field::Update()
 {
+    size_t numRows = m_field.size();
+    if (numRows > 0) {
+        // 最初の配列の要素しかみていない為、最初の要素以外に要素を追加しても処理が行われない
+        size_t numCols = m_field[0].size();
 
+        // 3Dモデルの読み込み
+        // モデルを配置
+        for (int row = 0; row < numRows; row++)
+        {
+            for (int col = 0; col < numCols; col++)
+            {
+                // セルの中央座標を計算
+                float x = col * kCellSize;
+                float z = row * kCellSize;
+
+                // モデルの位置を設定
+                VECTOR modelPos = VGet(x, -kCellSize / 2.0f, z);
+
+                if (m_field[row][col] == FieldState::RED)
+                {
+                    // モデルのマテリアルのディフューズカラーを赤にする
+                    MV1SetMaterialDifColor(m_pModel[ col + row * numCols]->GetModelHandle(), 0, GetColorF(1.0f, 0.0f, 0.0f, 1.0f));
+                }
+
+                //if (m_field[row][col] == FieldState::BLUE)
+                //{
+                //    // モデルのマテリアルのディフューズカラーを青にする
+                //    MV1SetMaterialDifColor(m_pModel.back()->GetModelHandle(), 0, GetColorF(0.0f, 0.0f, 1.0f, 0.0f));
+                //}
+            }
+        }
+    }
 }
 
 void Field::Draw()

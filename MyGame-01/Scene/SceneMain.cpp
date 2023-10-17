@@ -10,12 +10,12 @@
 
 SceneMain::SceneMain()
 {
-	// 地面のインスタンス生成
-	m_pField = std::make_shared<Field>();
-	m_pCamera = std::make_shared<Camera>();
-
 	// プレイヤーのインスタンス生成
 	m_pPlayer = std::make_shared<Player>();
+
+	// 地面のインスタンス生成
+	m_pField = std::make_shared<Field>(m_pPlayer->GetAttackPos());
+	m_pCamera = std::make_shared<Camera>();
 }
 
 // 更新
