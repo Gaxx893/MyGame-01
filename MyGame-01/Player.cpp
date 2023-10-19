@@ -86,8 +86,6 @@ void Player::UpdateNormal()
 	m_pModel->SetPos(m_data.pos);
 	// å¸Ç´çXêV
 	m_pModel->SetRot(VGet(0, m_data.angle, 0));
-
-	DrawFormatString(0, 0, 0xffffff, "y=%f", m_data.pos.y);
 }
 
 // í èÌExit

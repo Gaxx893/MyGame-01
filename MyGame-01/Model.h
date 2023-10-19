@@ -34,6 +34,9 @@ public:
 	// 拡大状態の設定
 	void SetScale(VECTOR scale);
 
+	// 色状態の設定
+	void SetColor(int Color);
+
 	// アニメーションの制御
 
 	/// <summary>

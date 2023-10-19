@@ -21,8 +21,8 @@ Field::Field(VECTOR PlayerattackPos) :
 {
     // 2次元vectorに要素を追加
     m_field.push_back({ 2, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 3, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 3, 1, 1, 1, 1 });
     m_field.push_back({ 1, 2, 1, 0, 1, 1 });
     m_field.push_back({ 1, 2, 1, 0, 1, 1 });
     m_field.push_back({ 1, 1, 1, 0, 1, 1 });
@@ -32,7 +32,7 @@ Field::Field(VECTOR PlayerattackPos) :
     // 行と列のサイズを取得
     size_t numRows = m_field.size();
     if (numRows > 0) {
-        // 最初の配列の要素しかみていない為、最初の要素以外に要素を追加しても処理が行われない
+        // 0番列の要素しかみていない為、0番列以外の要素を変更しても処理が行われない
         size_t numCols = m_field[0].size();
 
         // 3Dモデルの読み込み
@@ -45,10 +45,11 @@ Field::Field(VECTOR PlayerattackPos) :
                 {
                     // セルの中央座標を計算
                     float x = col * kCellSize;
+                    float y = -kCellSize / 2.0f;
                     float z = row * kCellSize;
 
                     // モデルの位置を設定
-                    VECTOR modelPos = VGet(x, -kCellSize / 2.0f, z);
+                    VECTOR modelPos = VGet(x, y, z);
                     // モデルのインスタンス生成
                     m_pModel.push_back(std::make_shared<Model>(kModelFilename));
                     // 座標指定
@@ -76,23 +77,37 @@ void Field::Update()
         {
             for (int col = 0; col < numCols; col++)
             {
-                // セルの中央座標を計算
-                float x = col * kCellSize;
-                float z = row * kCellSize;
+            //    model[row][col]->SetColor(m_field[row][col]);
 
-                // モデルの位置を設定
-                VECTOR modelPos = VGet(x, -kCellSize / 2.0f, z);
 
-                if (m_field[row][col] == FieldState::RED)
-                {
-                    // モデルのマテリアルのディフューズカラーを赤にする
-                    MV1SetMaterialDifColor(m_pModel[ col + row * numCols]->GetModelHandle(), 0, GetColorF(1.0f, 0.0f, 0.0f, 1.0f));
-                }
+                //int modelColor = m_field[row][col];
 
-                //if (m_field[row][col] == FieldState::BLUE)
+                //COLOR_F modelColorRGB = GetColorF(0.0f, 1.0f, 0.0f, 1.0f);
+                //if (m_field[row][col] == FieldState::RED)
                 //{
-                //    // モデルのマテリアルのディフューズカラーを青にする
-                //    MV1SetMaterialDifColor(m_pModel.back()->GetModelHandle(), 0, GetColorF(0.0f, 0.0f, 1.0f, 0.0f));
+                //    // モデルのマテリアルのディフューズカラーを赤にする
+                //    for (auto& model : m_pModel)
+                //    {
+                //        if (modelColor == FieldState::RED)
+                //        {
+                //            modelColorRGB = GetColorF(1.0f, 0.0f, 0.0f, 1.0f);
+                //            model->SetColor(modelColorRGB);
+                //        }
+                //    }
+                //}
+
+
+                //if (modelColor == FieldState::BLUE)
+                //{
+                //    // モデルのマテリアルのディフューズカラーを赤にする
+                //    for (auto& model : m_pModel)
+                //    {
+                //        if (model->GetPos().x == x && model->GetPos().y == y && model->GetPos().z == z)
+                //        {
+                //            modelColorRGB = GetColorF(0.0f, 0.0f, 1.0f, 1.0f);
+                //            model->SetColor(modelColorRGB);
+                //        }
+                //    }
                 //}
             }
         }
