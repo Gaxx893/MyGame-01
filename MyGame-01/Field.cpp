@@ -6,7 +6,11 @@
 namespace
 {
     // グラフィック情報
-    const char* const kModelFilename = "Data/Model/Cube_Grass_Single.mv1";
+    const char* const kGreenModelFilename = "Data/Model/GreenCube.mv1";
+    const char* const kRedModelFilename = "Data/Model/RedCube.mv1";
+    const char* const kBlueModelFilename = "Data/Model/BlueCube.mv1";
+    const char* const kYellowModelFilename = "Data/Model/YellowCube.mv1";
+    const char* const kPurpleModelFilename = "Data/Model/PurpleCube.mv1";
 
     // 5x5のセル数
     constexpr int kCellX = 6;
@@ -35,6 +39,12 @@ Field::Field(VECTOR PlayerattackPos) :
         // 0番列の要素しかみていない為、0番列以外の要素を変更しても処理が行われない
         size_t numCols = m_field[0].size();
 
+        m_pGreenModel.push_back(std::make_shared<Model>(kGreenModelFilename));
+        m_pRedModel.push_back(std::make_shared<Model>(kRedModelFilename));
+        m_pBlueModel.push_back(std::make_shared<Model>(kBlueModelFilename));
+        m_pYellowModel.push_back(std::make_shared<Model>(kYellowModelFilename));
+        m_pPurpleModel.push_back(std::make_shared<Model>(kPurpleModelFilename));
+
         // 3Dモデルの読み込み
         // モデルを配置
         for (int row = 0; row < numRows; row++)
@@ -50,10 +60,8 @@ Field::Field(VECTOR PlayerattackPos) :
 
                     // モデルの位置を設定
                     VECTOR modelPos = VGet(x, y, z);
-                    // モデルのインスタンス生成
-                    m_pModel.push_back(std::make_shared<Model>(kModelFilename));
                     // 座標指定
-                    m_pModel.back()->SetPos(modelPos);
+                    m_pGreenModel.back()->SetPos(modelPos);
                 }
             }
         }
@@ -77,38 +85,51 @@ void Field::Update()
         {
             for (int col = 0; col < numCols; col++)
             {
-            //    model[row][col]->SetColor(m_field[row][col]);
-
-
-                //int modelColor = m_field[row][col];
-
-                //COLOR_F modelColorRGB = GetColorF(0.0f, 1.0f, 0.0f, 1.0f);
-                //if (m_field[row][col] == FieldState::RED)
+                //for (auto& model : m_pModel)
                 //{
-                //    // モデルのマテリアルのディフューズカラーを赤にする
-                //    for (auto& model : m_pModel)
-                //    {
-                //        if (modelColor == FieldState::RED)
-                //        {
-                //            modelColorRGB = GetColorF(1.0f, 0.0f, 0.0f, 1.0f);
-                //            model->SetColor(modelColorRGB);
-                //        }
-                //    }
+                //    model->SetColor(m_field[row][col]);
                 //}
+                // セルの中央座標を計算
+                float x = col * kCellSize;
+                float y = -kCellSize / 2.0f;
+                float z = row * kCellSize;
+                
+                if (m_field[row][col] == FieldState::GREEN)
+                {
+                    // モデルの位置を設定
+                    VECTOR modelPos = VGet(x, y, z);
+                    // 座標指定
+                    m_pGreenModel.back()->SetPos(modelPos);
 
-
-                //if (modelColor == FieldState::BLUE)
-                //{
-                //    // モデルのマテリアルのディフューズカラーを赤にする
-                //    for (auto& model : m_pModel)
-                //    {
-                //        if (model->GetPos().x == x && model->GetPos().y == y && model->GetPos().z == z)
-                //        {
-                //            modelColorRGB = GetColorF(0.0f, 0.0f, 1.0f, 1.0f);
-                //            model->SetColor(modelColorRGB);
-                //        }
-                //    }
-                //}
+                }
+                else if (m_field[row][col] == FieldState::RED)
+                {
+                    // モデルの位置を設定
+                    VECTOR modelPos = VGet(x, y, z);
+                    // 座標指定
+                    m_pRedModel.back()->SetPos(modelPos);
+                }
+                else if (m_field[row][col] == FieldState::BLUE)
+                {
+                    // モデルの位置を設定
+                    VECTOR modelPos = VGet(x, y, z);
+                    // 座標指定
+                    m_pBlueModel.back()->SetPos(modelPos);
+                }
+                else if (m_field[row][col] == FieldState::YELLOW)
+                {
+                    // モデルの位置を設定
+                    VECTOR modelPos = VGet(x, y, z);
+                    // 座標指定
+                    m_pYellowModel.back()->SetPos(modelPos);
+                }
+                else if (m_field[row][col] == FieldState::PURPLE)
+                {
+                    // モデルの位置を設定
+                    VECTOR modelPos = VGet(x, y, z);
+                    // 座標指定
+                    m_pPurpleModel.back()->SetPos(modelPos);
+                }
             }
         }
     }
@@ -117,8 +138,19 @@ void Field::Update()
 void Field::Draw()
 {
     // 描画
-    for (auto& model : m_pModel)
+    for (auto& model : m_pGreenModel)
     {
         model->Draw();
     }
+
+    for (auto& model : m_pRedModel)
+    {
+        model->Draw();
+    }
+
+    for (auto& model : m_pBlueModel)
+    {
+        model->Draw();
+    }
+
 }
