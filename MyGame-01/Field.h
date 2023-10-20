@@ -2,6 +2,15 @@
 #include <DxLib.h>
 #include <vector>
 #include <memory>
+#include <array>
+#include <queue>
+
+struct ModelParam
+{
+	int handle = -1;
+	bool isFall = false;
+	VECTOR pos = { 0.0f, 0.0f, 0.0f };
+};
 
 class Model;
 
@@ -15,20 +24,19 @@ public:
 	void Update();	// 更新
 	void Draw();	// 描画
 
-	std::vector<std::shared_ptr<Model>> GetGreenModel() { return m_pGreenModel; }
-	std::vector<std::shared_ptr<Model>> GetRedModel() { return m_pRedModel; }
-	std::vector<std::shared_ptr<Model>> GetBlueModel() { return m_pBlueModel; }
-	std::vector<std::shared_ptr<Model>> GetYellowModel() { return m_pYellowModel; }
-	std::vector<std::shared_ptr<Model>> GetPurpleModel() { return m_pPurpleModel; }
-
 private:
-	std::vector<std::shared_ptr<Model>> m_pGreenModel;	// 緑ブロックのポインタ
-	std::vector<std::shared_ptr<Model>> m_pRedModel;	// 赤ブロックのポインタ
-	std::vector<std::shared_ptr<Model>> m_pBlueModel;	// 青ブロックのポインタ
-	std::vector<std::shared_ptr<Model>> m_pYellowModel;// 黄ブロックのポインタ
-	std::vector<std::shared_ptr<Model>> m_pPurpleModel;	// 紫ブロックのポインタ
+	void LoadModelHandle();
 
-	std::vector<std::vector<int>> m_field;	// 2次元配列のステージ
+	std::array<std::array<int, 8>, 8> m_field;	// 2次元配列のステージ
+
+	int stageSize;
+	int stageMaxSize;
+	std::vector<ModelParam> model;
+
+//	std::vector<std::shared_ptr<Model>> m_pModel;
+//	std::array<int, 5> m_modelHandles;	// モデルのハンドルを格納する配列
+//	std::vector<std::vector<std::queue<int>>> m_field(8, std::vector<std::queue<int>>(8));
+//	std::vector<std::queue<int>> data;
 
 	VECTOR playerAttackPos;	// プレイヤーが攻撃した座標
 
