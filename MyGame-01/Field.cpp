@@ -161,5 +161,5 @@ void Field::LoadModelHandle()
         model[i].isFall = false;
     }
 
-    modelSize = { 1.0f, 1.0f , 1.0f };
+//    modelSize = { 1.0f, 1.0f , 1.0f };
 }
