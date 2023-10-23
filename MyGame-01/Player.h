@@ -66,9 +66,6 @@ private:
 	//	VECTOR minDir;	// 
 	};
 
-
-	// 数フレーム前のプレイヤーの位置を保存しておく際に使えそうなクラス
-//	std::deque<PlayerParam> m_
 	PlayerParam m_data;	
 	StateMachine<State> m_stateMachine;
 };
