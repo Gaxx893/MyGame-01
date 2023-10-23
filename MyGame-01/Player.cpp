@@ -126,25 +126,25 @@ void Player::Move()
 	if (Pad::isPress(PAD_INPUT_RIGHT))
 	{
 		m_data.pos = VAdd(m_data.pos, VGet(kSpeed, 0.0f, 0.0f));
-		m_data.angle = -DX_PI_F / 2;// ‰EŒü‚«
+		m_data.angle = rightVec;// ‰EŒü‚«
 		isMoving = true;
 	}
 	else if (Pad::isPress(PAD_INPUT_LEFT))
 	{
 		m_data.pos = VAdd(m_data.pos, VGet(-kSpeed, 0.0f, 0.0f));
-		m_data.angle = DX_PI_F / 2;// ¶Œü‚«
+		m_data.angle = leftVec;// ¶Œü‚«
 		isMoving = true;
 	}
 	else if (Pad::isPress(PAD_INPUT_UP))
 	{
 		m_data.pos = VAdd(m_data.pos, VGet(0.0f, 0.0f, kSpeed));
-		m_data.angle = -DX_PI_F;// ãŒü‚«
+		m_data.angle = upVec;// ãŒü‚«
 		isMoving = true;
 	}
 	else if (Pad::isPress(PAD_INPUT_DOWN))
 	{
 		m_data.pos = VAdd(m_data.pos, VGet(0.0f, 0.0f, -kSpeed));
-		m_data.angle = 0;// ‰ºŒü‚«
+		m_data.angle = downVec;// ‰ºŒü‚«
 		isMoving = true;
 	}
 

@@ -22,7 +22,7 @@ SceneMain::SceneMain()
 	m_pPlayer = std::make_shared<Player>();
 
 	// 地面のインスタンス生成
-	m_pField = std::make_shared<Field>(m_pPlayer->GetAttackPos());
+	m_pField = std::make_shared<Field>();
 	m_pCamera = std::make_shared<Camera>();
 
 	// リソースの読み込み
@@ -64,16 +64,10 @@ SceneBase* SceneMain::Update()
 	}
 
 	m_pPlayer->Update();
-	m_pField->Update();
+	m_pField->Update(m_pPlayer->GetAttackPos(), m_pPlayer->GetDir());
 	m_pCamera->Update();
 
 	CheckCollide();
-
-	// ボタンを押したらシーン切り替え
-	if (Pad::isTrigger(PAD_INPUT_1))
-	{
-		return new SceneTitle;
-	}
 
 	// フェード処理
 	SceneBase::UpdateFade();
@@ -116,7 +110,7 @@ void SceneMain::Draw()
 	m_pField->Draw();
 
 	// 読み込んだBMPの表示テスト
-	DrawExtendGraph(0, 0, 200, 200, m_testHandle.back(), true);
+//	DrawExtendGraph(0, 0, 200, 200, m_testHandle.back(), true);
 
 	// フェード処理
 	SceneBase::DrawFade();

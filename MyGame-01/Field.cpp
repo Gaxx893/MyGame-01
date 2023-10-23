@@ -20,8 +20,8 @@ namespace
     constexpr float kCellSize = 210.0f;
 }
 
-Field::Field(VECTOR PlayerattackPos) :
-    playerAttackPos(PlayerattackPos)
+Field::Field() :
+    m_playerAttackPos(VGet(0.0f, 0.0f, 0.0f))
 {
     // 2次元vectorに要素を追加
     m_field.push_back({ 2, 1, 1, 1, 1, 1 });
@@ -39,11 +39,10 @@ Field::Field(VECTOR PlayerattackPos) :
         // 0番列の要素しかみていない為、0番列以外の要素を変更しても処理が行われない
         size_t numCols = m_field[0].size();
 
-        m_pGreenModel.push_back(std::make_shared<Model>(kGreenModelFilename));
-        m_pRedModel.push_back(std::make_shared<Model>(kRedModelFilename));
-        m_pBlueModel.push_back(std::make_shared<Model>(kBlueModelFilename));
-        m_pYellowModel.push_back(std::make_shared<Model>(kYellowModelFilename));
-        m_pPurpleModel.push_back(std::make_shared<Model>(kPurpleModelFilename));
+        //m_pRedModel.push_back(std::make_shared<Model>(kRedModelFilename));
+        //m_pBlueModel.push_back(std::make_shared<Model>(kBlueModelFilename));
+        //m_pYellowModel.push_back(std::make_shared<Model>(kYellowModelFilename));
+        //m_pPurpleModel.push_back(std::make_shared<Model>(kPurpleModelFilename));
 
         // 3Dモデルの読み込み
         // モデルを配置
@@ -60,6 +59,7 @@ Field::Field(VECTOR PlayerattackPos) :
 
                     // モデルの位置を設定
                     VECTOR modelPos = VGet(x, y, z);
+                    m_pGreenModel.push_back(std::make_shared<Model>(kGreenModelFilename));
                     // 座標指定
                     m_pGreenModel.back()->SetPos(modelPos);
                 }
@@ -72,9 +72,9 @@ Field::~Field()
 {
 }
 
-void Field::Update()
+void Field::Update(VECTOR PlayerAttackPos, float PlayerDir)
 {
-    size_t numRows = m_field.size();
+    /*size_t numRows = m_field.size();
     if (numRows > 0) {
         // 最初の配列の要素しかみていない為、最初の要素以外に要素を追加しても処理が行われない
         size_t numCols = m_field[0].size();
@@ -132,11 +132,25 @@ void Field::Update()
                 }
             }
         }
-    }
+    }*/
+
+    // プレイヤーの現在いるインデックスを算出
+    int PlayerX = (PlayerAttackPos.x + kCellSize / 2) / kCellSize;
+    int PlayerZ = (PlayerAttackPos.z + kCellSize / 2) / kCellSize;
+
+    DrawFormatString(0, 0, 0xffffff, "X =%d, Z =%d", PlayerX, PlayerZ);
+
+    const float rotateY = PlayerDir;
+
+    DrawFormatString(0, 15, 0xffffff, "rotate =%f", rotateY);
 }
 
 void Field::Draw()
 {
+
+    // ３Ｄ空間上に線分を描画する
+    DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, 1000.0f, 0.0f), GetColor(255, 255, 255));
+
     // 描画
     for (auto& model : m_pGreenModel)
     {

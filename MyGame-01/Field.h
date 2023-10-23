@@ -9,10 +9,10 @@ class Model;
 class Field
 {
 public:
-	Field(VECTOR PlayerattackPos);	// コンストラクタ
+	Field();	// コンストラクタ
 	~Field();	// デストラクタ
 
-	void Update();	// 更新
+	void Update(VECTOR PlayerAttackPos, float PlayerDir);	// 更新
 	void Draw();	// 描画
 
 	std::vector<std::shared_ptr<Model>> GetGreenModel() { return m_pGreenModel; }
@@ -26,11 +26,11 @@ private:
 	std::vector<std::shared_ptr<Model>> m_pRedModel;	// 赤ブロックのポインタ
 	std::vector<std::shared_ptr<Model>> m_pBlueModel;	// 青ブロックのポインタ
 	std::vector<std::shared_ptr<Model>> m_pYellowModel;// 黄ブロックのポインタ
-	std::vector<std::shared_ptr<Model>> m_pPurpleModel;	// 紫ブロックのポインタ
+	std::vector<std::shared_ptr<Model>> m_pPurpleModel;// 紫ブロックのポインタ
 
 	std::vector<std::vector<int>> m_field;	// 2次元配列のステージ
 
-	VECTOR playerAttackPos;	// プレイヤーが攻撃した座標
+	VECTOR m_playerAttackPos;	// プレイヤーが攻撃した座標
 
 	enum FieldState
 	{
