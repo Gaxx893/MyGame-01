@@ -74,7 +74,7 @@ void Player::EnterNormal()
 void Player::UpdateNormal()
 {
 	// 重力処理
-	Gravity();
+//	Gravity();
 	// 移動処理(アニメーションの切り替えも兼ねる)
 	Move();
 	// 攻撃処理(アニメーションの切り替えも兼ねる)
@@ -184,7 +184,7 @@ void Player::Attack()
 		{
 			// 攻撃アニメに変更
 			m_data.animNo = kAttackAnimeNo;
-			m_pModel->ChangeAnimation(m_data.animNo, false, false, 2);
+			m_pModel->ChangeAnimation(m_data.animNo, false, false, 1);
 		}
 	}
 }

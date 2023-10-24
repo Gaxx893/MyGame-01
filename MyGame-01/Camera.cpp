@@ -18,8 +18,8 @@ Camera::Camera()
 {
 	// ƒJƒƒ‰î•ñ‚Ì‰Šú‰»
 	m_data.fov = 60.0f * DX_PI_F / 180.0f;
-	m_data.targetPos = VGet(525.0f, 0.0f, 525.0f);
-	m_data.cameraPos = VGet(525.0f, 1000.0f, -450.0f);
+	m_data.targetPos = VGet(735.0f, 0.0f, 525.0f);
+	m_data.cameraPos = VGet(735.0f, 1000.0f, -450.0f);
 }
 
 void Camera::Init()

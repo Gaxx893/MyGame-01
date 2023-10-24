@@ -125,20 +125,9 @@ void Model::SetScale(VECTOR scale)
 	MV1SetScale(m_modelHandle, scale);
 }
 
-void Model::SetColor(int Color)
+void Model::SetFall(bool isFall)
 {
-	if (Color == 1)
-	{
-		MV1SetMaterialDifColor(m_modelHandle, 0, GetColorF(0.0f, 1.0f, 0.0f, 1.0f));	// óŒ
-	}
-	if (Color == 2)
-	{
-		MV1SetMaterialDifColor(m_modelHandle, 0, GetColorF(1.0f, 0.0f, 0.0f, 1.0f));	// ê‘
-	}
-	if (Color == 3)
-	{
-		MV1SetMaterialDifColor(m_modelHandle, 0, GetColorF(0.0f, 0.0f, 1.0f, 1.0f));	// ê¬
-	}
+	m_isFall = isFall;
 }
 
 void Model::SetAnimation(int animNo, bool isLoop, bool isForceChange)

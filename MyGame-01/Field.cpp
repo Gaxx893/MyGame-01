@@ -18,20 +18,28 @@ namespace
 
     // セルのサイズ
     constexpr float kCellSize = 210.0f;
+
+    // ステージのサイズ
+    constexpr int kStageSize = 8;
+    constexpr int kStageMaxSize = kStageSize * kStageSize;
+
+    // 重力
+    constexpr VECTOR kGravity = { 0.0f, -0.1f, 0.0f };
 }
 
 Field::Field() :
-    m_playerAttackPos(VGet(0.0f, 0.0f, 0.0f))
+    m_playerAttackPos(VGet(0.0f, 0.0f, 0.0f)),
+    m_modelPos(VGet(0.0f, 0.0f, 0.0f))
 {
     // 2次元vectorに要素を追加
-    m_field.push_back({ 2, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 3, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 3, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 2, 1, 0, 1, 1 });
-    m_field.push_back({ 1, 2, 1, 0, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 0, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 2, 1, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 3, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 3, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 2, 1, 0, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 2, 1, 0, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 0, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
 
     // 行と列のサイズを取得
     size_t numRows = m_field.size();
@@ -58,10 +66,10 @@ Field::Field() :
                     float z = row * kCellSize;
 
                     // モデルの位置を設定
-                    VECTOR modelPos = VGet(x, y, z);
+                    m_modelPos = VGet(x, y, z);
                     m_pGreenModel.push_back(std::make_shared<Model>(kGreenModelFilename));
                     // 座標指定
-                    m_pGreenModel.back()->SetPos(modelPos);
+                    m_pGreenModel.back()->SetPos(m_modelPos);
                 }
             }
         }
@@ -72,7 +80,7 @@ Field::~Field()
 {
 }
 
-void Field::Update(VECTOR PlayerAttackPos, float PlayerDir)
+void Field::Update()
 {
     /*size_t numRows = m_field.size();
     if (numRows > 0) {
@@ -133,16 +141,18 @@ void Field::Update(VECTOR PlayerAttackPos, float PlayerDir)
             }
         }
     }*/
-
-    // プレイヤーの現在いるインデックスを算出
-    int PlayerX = (PlayerAttackPos.x + kCellSize / 2) / kCellSize;
-    int PlayerZ = (PlayerAttackPos.z + kCellSize / 2) / kCellSize;
-
-    DrawFormatString(0, 0, 0xffffff, "X =%d, Z =%d", PlayerX, PlayerZ);
-
-    const float rotateY = PlayerDir;
-
-    DrawFormatString(0, 15, 0xffffff, "rotate =%f", rotateY);
+    for (auto& model : m_pGreenModel)
+    {
+        if (model->GetFall())
+        {
+            model->SetPos(VAdd(m_modelPos, kGravity));
+        }
+        else if(model->GetPos().y < -10.0f)
+        {
+            model->SetFall(false);
+            model->SetPos(VGet(m_modelPos.x, -kCellSize / 2.0f, m_modelPos.z));
+        }
+    }
 }
 
 void Field::Draw()
@@ -166,5 +176,82 @@ void Field::Draw()
     {
         model->Draw();
     }
+}
 
+void Field::SelectFallCube(VECTOR PlayerAttackPos, float PlayerDir)
+{
+    const float rotateY = PlayerDir;
+
+    // プレイヤーの現在いるインデックスを算出
+    int PlayerX = (PlayerAttackPos.x + kCellSize / 2) / kCellSize;
+    int PlayerZ = (PlayerAttackPos.z + kCellSize / 2) / kCellSize;
+
+    /*const int currentWidthNum = static_cast<int>(PlayerAttackPos.x + kStageSize / 2);
+    const int currentHeightNum = static_cast<int>(PlayerAttackPos.z + kStageSize / 2);*/
+
+    const int currentIndex = PlayerZ * kStageSize + PlayerX;
+    DrawFormatString(0, 0, 0xffffff, "X =%d, Z =%d", PlayerX, PlayerZ);
+
+    //ステージの端からステージ外方向には処理しない
+    if (PlayerZ == 0 && rotateY == downVec) return;
+    if (PlayerX == 0 && rotateY == leftVec) return;
+    if (PlayerZ == kStageSize - 1 && rotateY == upVec) return;
+    if (PlayerX == kStageSize - 1 && rotateY == rightVec) return;
+
+    int beginIndex = currentIndex;
+    int endIndex = currentIndex;
+
+    if (rotateY == leftVec)
+    {
+        beginIndex -= 1;
+        endIndex = PlayerZ * kStageSize;
+    }
+    if (rotateY == rightVec)
+    {
+        beginIndex += 1;
+        endIndex = PlayerZ * kStageSize + (kStageSize - 1);
+    }
+
+    if (rotateY == upVec)
+    {
+        beginIndex += kStageSize;
+        endIndex = kStageMaxSize - (kStageSize - PlayerX);
+    }
+    if (rotateY == downVec)
+    {
+        beginIndex -= kStageSize;
+        endIndex = PlayerX;
+    }
+
+    SelectCubeLine(beginIndex, endIndex, currentIndex);
+
+    DrawFormatString(0, 15, 0xffffff, "rotate =%f", rotateY);
+
+    DrawFormatString(0, 60, 0xffffff, "beginIndex =%d", beginIndex);
+    DrawFormatString(0, 75, 0xffffff, "endIndex =%d", endIndex);
+    DrawFormatString(0, 90, 0xffffff, "Index =%d", currentIndex);
+}
+
+void Field::SelectCubeLine(const int beginIndex, const int endIndex, const int currentIndex)
+{
+    //上方向、右方向
+    if (beginIndex < endIndex)
+    {
+        for (int i = beginIndex; i <= endIndex; i++)
+        {
+            const bool widthLineCheck = i / kStageSize == currentIndex / kStageSize;
+            const bool heightLineCheck = i % kStageSize == currentIndex % kStageSize;
+            if (widthLineCheck || heightLineCheck) m_pGreenModel[i]->SetFall(true);
+        }
+    }
+    //下方向、左方向
+    else
+    {
+        for (int i = beginIndex; endIndex <= i; i--)
+        {
+            const bool widthLineCheck = i / kStageSize == currentIndex / kStageSize;
+            const bool heightLineCheck = i % kStageSize == currentIndex % kStageSize;
+            if (widthLineCheck || heightLineCheck) m_pGreenModel[i]->SetFall(true);
+        }
+    }
 }

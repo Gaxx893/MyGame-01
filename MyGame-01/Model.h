@@ -34,11 +34,12 @@ public:
 	// 拡大状態の設定
 	void SetScale(VECTOR scale);
 
-	// 色状態の設定
-	void SetColor(int Color);
+	// 落下状態の設定
+	void SetFall(bool isFall);
+
+	bool GetFall() { return m_isFall; }
 
 	// アニメーションの制御
-
 	/// <summary>
 	/// アニメーションを設定する(ぱっと切り替える)
 	/// </summary>
@@ -94,6 +95,8 @@ private:
 
 	// 存在状態
 	bool m_isExist = true;
+	// 落下状態
+	bool m_isFall = false;
 
 	// アニメーション変更速度
 	int m_animSpeed;
