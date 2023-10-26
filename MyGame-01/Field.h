@@ -15,7 +15,7 @@ public:
 
 	void Update();	// çXêV
 	void Draw();	// ï`âÊ
-	void SelectFallCube(VECTOR PlayerAttackPos, float PlayerDir);
+	void SelectFallCube(VECTOR PlayerAttackPos, VECTOR PlayerDir);
 
 	std::vector<std::shared_ptr<Model>> GetGreenModel() { return m_pGreenModel; }
 	std::vector<std::shared_ptr<Model>> GetRedModel() { return m_pRedModel; }

@@ -63,7 +63,7 @@ SceneBase* SceneMain::Update()
 		}
 	}
 
-	m_pField->SelectFallCube(m_pPlayer->GetAttackPos(), m_pPlayer->GetDir());
+	m_pField->SelectFallCube(m_pPlayer->GetAttackPos(), m_pPlayer->GetAngle());
 
 	m_pPlayer->Update();
 	m_pField->Update();

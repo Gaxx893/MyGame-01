@@ -22,11 +22,12 @@ namespace
 	constexpr float kCellSize = 210.0f;
 }
 
-Player::Player()
+Player::Player():
+	m_angle(VGet(0.0f, 0.0f, 0.0f))
 {
 	// プレイヤー情報の初期化
 	m_data.pos = VGet(525.0f, 0.0f, 525.0f);
-	m_data.angle = 180.0f * DX_PI_F / 180.0f;
+	m_data.angle = { 0.0f, -1.0f, 0.0f };
 	m_data.animNo = kIdleAnimeNo;
 	m_data.isOnField = false;
 	m_data.velocity = 0.0f;
@@ -44,7 +45,7 @@ Player::Player()
 	m_pModel = std::make_shared<Model>(kPlayerFileName);
 	m_pModel->SetAnimation(m_data.animNo, true, true);
 	m_pModel->SetPos(m_data.pos);
-	m_pModel->SetRot(VGet(0.0f, m_data.angle, 0.0f));
+	m_pModel->SetRot(m_data.angle);
 
 	// ステートマシンの初期化、Entry
 	auto dummy = []() {};
@@ -85,7 +86,9 @@ void Player::UpdateNormal()
 	// 座標更新
 	m_pModel->SetPos(m_data.pos);
 	// 向き更新
-	m_pModel->SetRot(VGet(0, m_data.angle, 0));
+	m_pModel->SetRot(m_data.angle);
+
+	DrawFormatString(0, 30, 0xffffff, "angle = %f", m_data.angle.y);
 }
 
 // 通常Exit
@@ -126,25 +129,25 @@ void Player::Move()
 	if (Pad::isPress(PAD_INPUT_RIGHT))
 	{
 		m_data.pos = VAdd(m_data.pos, VGet(kSpeed, 0.0f, 0.0f));
-		m_data.angle = rightVec;// 右向き
+		m_data.angle.y = rightVec;// 右向き
 		isMoving = true;
 	}
 	else if (Pad::isPress(PAD_INPUT_LEFT))
 	{
 		m_data.pos = VAdd(m_data.pos, VGet(-kSpeed, 0.0f, 0.0f));
-		m_data.angle = leftVec;// 左向き
+		m_data.angle.y = leftVec;// 左向き
 		isMoving = true;
 	}
 	else if (Pad::isPress(PAD_INPUT_UP))
 	{
 		m_data.pos = VAdd(m_data.pos, VGet(0.0f, 0.0f, kSpeed));
-		m_data.angle = upVec;// 上向き
+		m_data.angle.y = upVec;// 上向き
 		isMoving = true;
 	}
 	else if (Pad::isPress(PAD_INPUT_DOWN))
 	{
 		m_data.pos = VAdd(m_data.pos, VGet(0.0f, 0.0f, -kSpeed));
-		m_data.angle = downVec;// 下向き
+		m_data.angle.y = downVec;// 下向き
 		isMoving = true;
 	}
 
@@ -178,6 +181,7 @@ void Player::Attack()
 	{
 		// 攻撃した座標を保存
 		m_data.atkPos = m_data.pos;
+		m_angle = m_data.angle;
 
 		bool isAttackAnim = m_data.animNo == kAttackAnimeNo;
 		if (!isAttackAnim)
@@ -186,6 +190,10 @@ void Player::Attack()
 			m_data.animNo = kAttackAnimeNo;
 			m_pModel->ChangeAnimation(m_data.animNo, false, false, 1);
 		}
+	}
+	else
+	{
+		m_angle = { 0.0f, -1.0f, 0.0f };
 	}
 }
 

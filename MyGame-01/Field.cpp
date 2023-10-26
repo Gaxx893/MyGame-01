@@ -35,9 +35,9 @@ Field::Field() :
     m_field.push_back({ 2, 1, 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 3, 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 3, 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 2, 1, 0, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 2, 1, 0, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 1, 1, 0, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 2, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 2, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
 
@@ -58,19 +58,16 @@ Field::Field() :
         {
             for (int col = 0; col < numCols; col++)
             {
-                if (m_field[row][col] != FieldState::NONE)
-                {
-                    // セルの中央座標を計算
-                    float x = col * kCellSize;
-                    float y = -kCellSize / 2.0f;
-                    float z = row * kCellSize;
+                // セルの中央座標を計算
+                float x = col * kCellSize;
+                float y = -kCellSize / 2.0f;
+                float z = row * kCellSize;
 
-                    // モデルの位置を設定
-                    m_modelPos = VGet(x, y, z);
-                    m_pGreenModel.push_back(std::make_shared<Model>(kGreenModelFilename));
-                    // 座標指定
-                    m_pGreenModel.back()->SetPos(m_modelPos);
-                }
+                // モデルの位置を設定
+                m_modelPos = VGet(x, y, z);
+                m_pGreenModel.push_back(std::make_shared<Model>(kGreenModelFilename));
+                // 座標指定
+                m_pGreenModel.back()->SetPos(m_modelPos);
             }
         }
     }
@@ -147,7 +144,7 @@ void Field::Update()
         {
             model->SetPos(VAdd(m_modelPos, kGravity));
         }
-        else if(model->GetPos().y < -10.0f)
+        if(model->GetPos().y < -115.0f)
         {
             model->SetFall(false);
             model->SetPos(VGet(m_modelPos.x, -kCellSize / 2.0f, m_modelPos.z));
@@ -178,16 +175,15 @@ void Field::Draw()
     }
 }
 
-void Field::SelectFallCube(VECTOR PlayerAttackPos, float PlayerDir)
+void Field::SelectFallCube(VECTOR PlayerAttackPos, VECTOR PlayerDir)
 {
-    const float rotateY = PlayerDir;
+    const float rotateY = PlayerDir.y;
+    DrawFormatString(0, 15, 0xffffff, "rotateY = % f", rotateY);
+    if (rotateY < 0.0f) return;
 
     // プレイヤーの現在いるインデックスを算出
     int PlayerX = (PlayerAttackPos.x + kCellSize / 2) / kCellSize;
     int PlayerZ = (PlayerAttackPos.z + kCellSize / 2) / kCellSize;
-
-    /*const int currentWidthNum = static_cast<int>(PlayerAttackPos.x + kStageSize / 2);
-    const int currentHeightNum = static_cast<int>(PlayerAttackPos.z + kStageSize / 2);*/
 
     const int currentIndex = PlayerZ * kStageSize + PlayerX;
     DrawFormatString(0, 0, 0xffffff, "X =%d, Z =%d", PlayerX, PlayerZ);
@@ -224,8 +220,6 @@ void Field::SelectFallCube(VECTOR PlayerAttackPos, float PlayerDir)
     }
 
     SelectCubeLine(beginIndex, endIndex, currentIndex);
-
-    DrawFormatString(0, 15, 0xffffff, "rotate =%f", rotateY);
 
     DrawFormatString(0, 60, 0xffffff, "beginIndex =%d", beginIndex);
     DrawFormatString(0, 75, 0xffffff, "endIndex =%d", endIndex);
