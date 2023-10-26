@@ -75,7 +75,7 @@ void Player::EnterNormal()
 void Player::UpdateNormal()
 {
 	// 重力処理
-//	Gravity();
+	Gravity();
 	// 移動処理(アニメーションの切り替えも兼ねる)
 	Move();
 	// 攻撃処理(アニメーションの切り替えも兼ねる)
@@ -87,8 +87,6 @@ void Player::UpdateNormal()
 	m_pModel->SetPos(m_data.pos);
 	// 向き更新
 	m_pModel->SetRot(m_data.angle);
-
-	DrawFormatString(0, 30, 0xffffff, "angle = %f", m_data.angle.y);
 }
 
 // 通常Exit

@@ -32,11 +32,11 @@ Field::Field() :
     m_modelPos(VGet(0.0f, 0.0f, 0.0f))
 {
     // 2次元vectorに要素を追加
-    m_field.push_back({ 2, 1, 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 3, 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 3, 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 2, 1, 1, 1, 1, 1, 1 });
-    m_field.push_back({ 1, 2, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
+    m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
     m_field.push_back({ 1, 1, 1, 1, 1, 1, 1, 1 });
@@ -144,17 +144,19 @@ void Field::Update()
         {
             model->SetPos(VAdd(m_modelPos, kGravity));
         }
+
         if(model->GetPos().y < -115.0f)
         {
             model->SetFall(false);
             model->SetPos(VGet(m_modelPos.x, -kCellSize / 2.0f, m_modelPos.z));
         }
     }
+
+    DrawFormatString(0, 0, 0xffffff, "pos = %f", m_pGreenModel[2]->GetPos().y);
 }
 
 void Field::Draw()
 {
-
     // ３Ｄ空間上に線分を描画する
     DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, 1000.0f, 0.0f), GetColor(255, 255, 255));
 
@@ -178,7 +180,6 @@ void Field::Draw()
 void Field::SelectFallCube(VECTOR PlayerAttackPos, VECTOR PlayerDir)
 {
     const float rotateY = PlayerDir.y;
-    DrawFormatString(0, 15, 0xffffff, "rotateY = % f", rotateY);
     if (rotateY < 0.0f) return;
 
     // プレイヤーの現在いるインデックスを算出
@@ -186,7 +187,6 @@ void Field::SelectFallCube(VECTOR PlayerAttackPos, VECTOR PlayerDir)
     int PlayerZ = (PlayerAttackPos.z + kCellSize / 2) / kCellSize;
 
     const int currentIndex = PlayerZ * kStageSize + PlayerX;
-    DrawFormatString(0, 0, 0xffffff, "X =%d, Z =%d", PlayerX, PlayerZ);
 
     //ステージの端からステージ外方向には処理しない
     if (PlayerZ == 0 && rotateY == downVec) return;
@@ -220,15 +220,12 @@ void Field::SelectFallCube(VECTOR PlayerAttackPos, VECTOR PlayerDir)
     }
 
     SelectCubeLine(beginIndex, endIndex, currentIndex);
-
-    DrawFormatString(0, 60, 0xffffff, "beginIndex =%d", beginIndex);
-    DrawFormatString(0, 75, 0xffffff, "endIndex =%d", endIndex);
-    DrawFormatString(0, 90, 0xffffff, "Index =%d", currentIndex);
 }
 
 void Field::SelectCubeLine(const int beginIndex, const int endIndex, const int currentIndex)
 {
     //上方向、右方向
+
     if (beginIndex < endIndex)
     {
         for (int i = beginIndex; i <= endIndex; i++)
