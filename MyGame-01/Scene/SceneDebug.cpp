@@ -4,6 +4,7 @@
 
 #include "../Util/Pad.h"
 #include "../Util/Range.h"
+#include "../Field.h"
 
 namespace
 {
@@ -19,7 +20,8 @@ namespace
 
 SceneDebug::SceneDebug() :
 	m_pos(165.0f, 110.0f),
-	m_sceneNo(1)
+	m_sceneNo(1),
+	m_pField(nullptr)
 {
 }
 
@@ -56,7 +58,8 @@ SceneBase* SceneDebug::Update()
 		if (Pad::isTrigger(PAD_INPUT_1))
 		{
 			// ÉQÅ[ÉÄèIóπ
-			return new SceneMain();
+			m_pField = std::make_shared<Field>();
+			return new SceneMain(m_pField);
 			break;
 		}
 	case 3:

@@ -6,6 +6,7 @@
 #include "../Util/Pad.h"
 #include "../Util/Game.h"
 #include "../Util/Range.h"
+#include "../Field.h"
 
 namespace
 {
@@ -21,7 +22,8 @@ SceneTitle::SceneTitle() :
 	m_handle(-1),
 	m_frameHandle(-1),
 	m_pos(0, 0),
-	m_sceneNo(1)
+	m_sceneNo(1),
+	m_pField(nullptr)
 {
 	// グラフィック情報のロード
 	m_handle = LoadGraph(kGameNameFileName);
@@ -55,7 +57,8 @@ SceneBase* SceneTitle::Update()
 	case 1:
 		if (Pad::isTrigger(PAD_INPUT_1))
 		{
-			return new SceneMain;
+			m_pField = std::make_shared<Field>();
+			return new SceneMain(m_pField);
 			break;
 		}
 	case 2:

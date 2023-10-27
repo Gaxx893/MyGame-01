@@ -75,9 +75,9 @@ void Player::EnterNormal()
 void Player::UpdateNormal()
 {
 	// 重力処理
-	Gravity();
+//	Gravity();
 	// 移動処理(アニメーションの切り替えも兼ねる)
-	Move();
+//	Move();
 	// 攻撃処理(アニメーションの切り替えも兼ねる)
 	Attack();
 

@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="FieldBase.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="FieldBase.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene\SceneMain.h" />
     <ClInclude Include="StageData.h" />

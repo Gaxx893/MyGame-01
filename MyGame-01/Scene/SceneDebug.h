@@ -4,6 +4,8 @@
 #include "../Util/Vec2.h"
 #include <memory>
 
+class FieldBase;
+
 // デバッグ用のシーン選択クラス
 class SceneDebug : public SceneBase
 {
@@ -17,5 +19,7 @@ public:
 private:
 	Vec2 m_pos;
 	int m_sceneNo;
+
+	std::shared_ptr<FieldBase> m_pField;
 };
 

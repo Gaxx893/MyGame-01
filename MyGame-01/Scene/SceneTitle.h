@@ -6,6 +6,8 @@
 
 #include "SceneBase.h"
 
+class FieldBase;
+
 // タイトル画面クラス
 class SceneTitle : public SceneBase
 {
@@ -25,4 +27,6 @@ private:
 
 	Vec2 m_pos;
 	int m_sceneNo;	// 選択番号
+
+	std::shared_ptr<FieldBase> m_pField;
 };
