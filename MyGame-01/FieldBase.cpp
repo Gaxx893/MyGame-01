@@ -168,6 +168,15 @@ void FieldBase::ModelLoad(int Model1)
 		float x = 200.0f * static_cast<float>(i % m_data.blockNumX) - m_data.blockNumX / 2;
 		float z = 200.0f * static_cast<float>(m_data.blockNumZ - (i / m_data.blockNumX)) - m_data.blockNumX / 2;
 
+		if (m_blockNum[i] == 1)
+		{
+			// 草地面
+			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
+			m_pGrassCube.back()->SetUseCollision(true, true);
+			m_pGrassCube.back()->SetPos(VGet(x, kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			continue;
+		}
+
 		if (m_blockNum[i] == 17)
 		{
 			// 草地面

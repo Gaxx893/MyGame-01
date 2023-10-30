@@ -30,6 +30,9 @@ public:
 
 	void ModelLoad(int Model1);//モデルロード(全部のモデル)
 
+	// 草ブロックモデルの取得
+	std::vector<std::shared_ptr<Model>> GetGrassCube() { return m_pGrassCube; }
+
 protected:
 	std::vector<std::shared_ptr<Model>> m_pGrassCube;
 
