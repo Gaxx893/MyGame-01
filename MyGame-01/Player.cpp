@@ -19,7 +19,7 @@ namespace
 	constexpr float kGravity = -1.0f;
 	constexpr float kJumpPower = 16.0f;	// ジャンプ力
 	constexpr float kRotSpeed = 0.05f;	// 旋回速度
-	constexpr VECTOR kPlayerVec{ 0.0f,0.0f,-10.0f };	// 移動量
+	constexpr VECTOR kPlayerVec{ 0.0f,0.0f,-20.0f };	// 移動量
 
 	// セルのサイズ
 	constexpr float kCellSize = 210.0f;

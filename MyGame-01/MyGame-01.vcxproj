@@ -163,6 +163,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneDebug.cpp" />
+    <ClCompile Include="CannonShot.cpp" />
     <ClCompile Include="Util\Pad.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="FieldBase.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene\SceneMain.h" />
+    <ClInclude Include="CannonShot.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Util\Game.h" />

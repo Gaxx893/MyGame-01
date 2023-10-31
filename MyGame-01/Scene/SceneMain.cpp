@@ -1,11 +1,12 @@
 #include <vector>
 
+#include "../StateMachine.h"
+#include "../Util/Pad.h"
 #include "../Model.h"
+#include "../Player.h"
 #include "../FieldBase.h"
 #include "../Camera.h"
-#include "../StateMachine.h"
-#include "../Player.h"
-#include "../Util/Pad.h"
+#include "../CannonShot.h"
 
 #include "SceneMain.h"
 #include "SceneTitle.h"
@@ -14,10 +15,17 @@ namespace
 {
 	// 非同期読み込みのテスト　ロードするリソースの数
 	constexpr int kTestLoadNum = 216;
+
+	// ショットの数
+	constexpr int kShotNum = 6;
+	// ショット間
+	constexpr float kShotDistance = 100.0f;
+	constexpr int kShootingInterval = 60 * 1;
 }
 
 SceneMain::SceneMain(std::shared_ptr<FieldBase> Field):
-	m_pField(Field)
+	m_pField(Field),
+	m_frameCount(0)
 {
 	// プレイヤーのインスタンス生成
 	m_pPlayer = std::make_shared<Player>();
@@ -60,9 +68,25 @@ SceneBase* SceneMain::Update()
 		}
 	}
 
+	m_frameCount++;
+
+	// 砲弾のインスタンス生成
+	if (m_pCannonShot.size() < kShotNum)
+	{
+		if (m_frameCount > kShootingInterval)
+		{
+			m_frameCount = 0;
+			m_pCannonShot.push_back(new CannonShot(m_pField->GetCannon().back()->GetPos()));
+		}
+	}
+
 	m_pPlayer->Update();
 	m_pField->Update();
 	m_pCamera->Update(m_pPlayer->GetPos(), m_pPlayer->GetAngle());
+	for (auto& shot : m_pCannonShot)
+	{
+		shot->Update();
+	}
 
 	CheckCollide();
 
@@ -105,6 +129,10 @@ void SceneMain::Draw()
 	
 	m_pPlayer->Draw();
 	m_pField->Draw();
+	for (auto& shot : m_pCannonShot)
+	{
+		shot->Draw();
+	}
 
 	// 読み込んだBMPの表示テスト
 //	DrawExtendGraph(0, 0, 200, 200, m_testHandle.back(), true);

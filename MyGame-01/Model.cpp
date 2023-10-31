@@ -1,5 +1,5 @@
 #include "Model.h"
-#include <assert.h>
+#include <cassert>
 
 namespace
 {

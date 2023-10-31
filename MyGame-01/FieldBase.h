@@ -24,17 +24,18 @@ public:
 	void Update();
 	void Draw();
 
-	void FirstModelLoad(); // モデルロード(最初の一個だけ)
+//	void FirstModelLoad(); // モデルロード(最初の一個だけ)
 
 	void LoadFile(const char* fileName);
 
-	void ModelLoad(int Model1);//モデルロード(全部のモデル)
+	void ModelLoad(int Model1, int Model2);//モデルロード(全部のモデル)
 
-	// 草ブロックモデルの取得
-	std::vector<std::shared_ptr<Model>> GetGrassCube() { return m_pGrassCube; }
+	std::vector<std::shared_ptr<Model>> GetGrassCube() { return m_pGrassCube; }	// 草ブロックモデル
+	std::vector<std::shared_ptr<Model>> GetCannon() { return m_pCannon; }		// 砲台モデル
 
 protected:
 	std::vector<std::shared_ptr<Model>> m_pGrassCube;
+	std::vector<std::shared_ptr<Model>> m_pCannon;
 
 	//ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum;
@@ -43,5 +44,7 @@ protected:
 	int m_stageNum;
 
 	loadData m_data; // ロードデータ
+
+	float m_cannonBallPosX;
 };
 

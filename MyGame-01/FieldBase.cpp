@@ -8,6 +8,8 @@ namespace
 {
 	//ファイル名
 	const char* const kGrassBlock = "Data/Model/GreenCube.mv1";
+	const char* const kCannon = "Data/Model/Cannon.mv1";
+	const char* const kCannonBall = "Data/Model/Cannonball.mv1";
 
 	// フィールドの横・奥行きのサイズ
 	constexpr int kBlockNumX = 100;
@@ -23,10 +25,13 @@ namespace
 	constexpr float kFieldSideLengthX = kBlockSideLength * kBlockNumX;
 	constexpr float kFieldSideLengthZ = kBlockSideLength * kBlockNumZ;
 
+	constexpr float kSpeed = 2.0f;
+
 }
 
 FieldBase::FieldBase() :
-	m_stageNum(-1)
+	m_stageNum(-1),
+	m_cannonBallPosX(0.0f)
 {
 	m_data.blockNumX = 0;
 	m_data.blockNumZ = 0;
@@ -40,19 +45,27 @@ FieldBase::~FieldBase()
 
 void FieldBase::Init(loadData data)
 {
-	FirstModelLoad(); // 最初に複製するためにモデルを用意する
+//	FirstModelLoad(); // 最初に複製するためにモデルを用意する
 
 	LoadFile(data.fileName);
 
 	//最初にロードしたモデルと合わせてモデルを100個生成
 	int orgModel1 = MV1LoadModel(kGrassBlock);
+	int orgModel2 = MV1LoadModel(kCannon);
 
-	ModelLoad(orgModel1);
+	ModelLoad(orgModel1, orgModel2);
 }
 
 void FieldBase::Update()
 {
+	m_cannonBallPosX += kSpeed;
+
 	for (auto& model : m_pGrassCube)
+	{
+		model->Update();
+	}
+
+	for (auto& model : m_pCannon)
 	{
 		model->Update();
 	}
@@ -64,18 +77,23 @@ void FieldBase::Draw()
 	{
 		model->Draw();
 	}
+
+	for (auto& model : m_pCannon)
+	{
+		model->Draw();
+	}
 }
 
-//3Dモデルをロード
-void FieldBase::FirstModelLoad()
-{
-	float x = 100.0f * static_cast<float>(0 % m_data.blockNumX) - m_data.blockNumX / 2;
-	float z = 100.0f * static_cast<float>(m_data.blockNumZ - (0 / m_data.blockNumX)) - m_data.blockNumX / 2;
-
-	m_pGrassCube.push_back(std::make_shared<Model>(kGrassBlock));
-	m_pGrassCube.back()->SetPos(VGet(x, 0.0f, z));// 地面がy = 0.0fで描画されるようにする
-	m_pGrassCube.back()->SetUseCollision(true, true);
-}
+////3Dモデルをロード
+//void FieldBase::FirstModelLoad()
+//{
+//	float x = 100.0f * static_cast<float>(0 % m_data.blockNumX) - m_data.blockNumX / 2;
+//	float z = 100.0f * static_cast<float>(m_data.blockNumZ - (0 / m_data.blockNumX)) - m_data.blockNumX / 2;
+//
+//	//m_pGrassCube.push_back(std::make_shared<Model>(kGrassBlock));
+//	//m_pGrassCube.back()->SetPos(VGet(x, 0.0f, z));// 地面がy = 0.0fで描画されるようにする
+//	//m_pGrassCube.back()->SetUseCollision(true, true);
+//}
 
 void FieldBase::LoadFile(const char* fileName)
 {
@@ -160,7 +178,7 @@ void FieldBase::LoadFile(const char* fileName)
 	fclose(fp);
 }
 
-void FieldBase::ModelLoad(int Model1)
+void FieldBase::ModelLoad(int Model1, int Model2)
 {
 	//地面に並べる
 	for (int i = 0; i < m_blockNum.size(); i++)
@@ -170,10 +188,25 @@ void FieldBase::ModelLoad(int Model1)
 
 		if (m_blockNum[i] == 1)
 		{
-			// 草地面
+			// 2段目の草地面
 			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
 			m_pGrassCube.back()->SetUseCollision(true, true);
 			m_pGrassCube.back()->SetPos(VGet(x, kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			continue;
+		}
+
+		if (m_blockNum[i] == 7)
+		{
+			// 草地面
+			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
+			m_pGrassCube.back()->SetUseCollision(true, true);
+			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+
+			// 砲台
+			m_pCannon.push_back(std::make_shared<Model>(Model2));
+			m_pCannon.back()->SetUseCollision(true, true);
+			m_pCannon.back()->SetPos(VGet(x, 85.0f, z));
+			m_pCannon.back()->SetRot(VGet(0.0f, DX_PI_F, 0.0f));
 			continue;
 		}
 
@@ -182,7 +215,7 @@ void FieldBase::ModelLoad(int Model1)
 			// 草地面
 			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
 			m_pGrassCube.back()->SetUseCollision(true, true);
-			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));
 			continue;
 		}
 	}
