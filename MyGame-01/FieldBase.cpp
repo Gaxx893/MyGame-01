@@ -30,8 +30,7 @@ namespace
 }
 
 FieldBase::FieldBase() :
-	m_stageNum(-1),
-	m_cannonBallPosX(0.0f)
+	m_stageNum(-1)
 {
 	m_data.blockNumX = 0;
 	m_data.blockNumZ = 0;
@@ -58,8 +57,6 @@ void FieldBase::Init(loadData data)
 
 void FieldBase::Update()
 {
-	m_cannonBallPosX += kSpeed;
-
 	for (auto& model : m_pGrassCube)
 	{
 		model->Update();

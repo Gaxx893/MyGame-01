@@ -44,7 +44,5 @@ protected:
 	int m_stageNum;
 
 	loadData m_data; // ロードデータ
-
-	float m_cannonBallPosX;
 };
 

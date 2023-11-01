@@ -24,6 +24,8 @@ public:
 	void Draw();		// 描画
 	void UpdateIdle();	// 待機
 	void UpdateAttack();// 攻撃
+	void OnDamage(int damage);	// 被ダメージ
+	void DrawUI();
 
 public:
 	VECTOR GetPos() { return m_data.pos; }			// 現在座標の取得
@@ -38,6 +40,7 @@ public:
 	enum State
 	{
 		Normal,
+		Damage,
 		Death
 	};
 
@@ -54,6 +57,7 @@ private:
 		bool isOnField;	// 地面に乗っているか
 		float velocity;	// 重力加速度
 		int animNo;		// アニメーション番号
+		bool isJumping;	// ジャンプしているか
 		float jumpAcc;	// ジャンプ処理用加速度
 	};
 
@@ -61,4 +65,9 @@ private:
 	StateMachine<State> m_stateMachine;
 
 	VECTOR m_modelPos;
+
+	int m_hp;			// HP
+	int m_damageFrame;	// 無敵時間
+	float m_hpRate;		// 最大HPに対する現在のHPの割合
+	float m_barWidth;	// HPバーの長さ
 };

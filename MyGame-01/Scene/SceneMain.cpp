@@ -128,6 +128,7 @@ void SceneMain::Draw()
 	}
 	
 	m_pPlayer->Draw();
+	m_pPlayer->DrawUI();
 	m_pField->Draw();
 	for (auto& shot : m_pCannonShot)
 	{
@@ -168,5 +169,23 @@ void SceneMain::CheckCollide()
 		//{
 		//	m_pPlayer->SetIsOnField(false);
 		//}
+	}
+
+	// ショットとの当たり判定
+	for (auto& shot : m_pCannonShot)
+	{
+		VECTOR playerPos = m_pPlayer->GetPos();		// プレイヤーの現在位置を取得
+		VECTOR shotPos = shot->GetPos();			// 砲弾の現在位置を取得
+		VECTOR toShot = VSub(shotPos, playerPos);	// プレイヤーから砲弾への方向と距離を取得
+
+		// プレイヤーと砲弾の間の距離を取得
+		float distance = VSize(toShot);
+		// プレイヤーと砲弾の半径を足した合計がプレイヤーと砲弾の半径の合計値より小さい場合
+		if (distance < (m_pPlayer->GetColRadius() + shot->GetColRadius()))
+		{
+			// 砲弾に当たった
+			m_pPlayer->OnDamage(2);
+		}
+
 	}
 }

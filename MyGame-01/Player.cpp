@@ -15,18 +15,25 @@ namespace
 
 	// プレイヤーのパラメータ
 	constexpr float kSpeed = 20.0f;
-	constexpr float kColRadius = 50.0f;
+	constexpr float kColRadius = 63.0f;
 	constexpr float kGravity = -1.0f;
 	constexpr float kJumpPower = 16.0f;	// ジャンプ力
 	constexpr float kRotSpeed = 0.05f;	// 旋回速度
 	constexpr VECTOR kPlayerVec{ 0.0f,0.0f,-20.0f };	// 移動量
 
-	// セルのサイズ
-	constexpr float kCellSize = 210.0f;
+	// 最大HP
+	constexpr int max_hp = 4;
+	// HPバー
+	constexpr int hp_bar_width = 128;
+	constexpr int hp_bar_height = 20;
 }
 
 Player::Player() :
-	m_modelPos(VGet(0.0f, 0.0f, 0.0f))
+	m_modelPos(VGet(0.0f, 0.0f, 0.0f)),
+	m_hp(max_hp),
+	m_damageFrame(0),
+	m_hpRate(0.0f),
+	m_barWidth(0.0f)
 {
 	// プレイヤー情報の初期化
 	m_data.pos = VGet(525.0f, 0.0f, 525.0f);
@@ -132,6 +139,7 @@ void Player::UpdateIdle()
 		{
 			m_data.jumpAcc = kJumpPower;
 			m_data.isOnField = false;
+			isJumping = true;
 		}
 	}
 
@@ -146,7 +154,7 @@ void Player::UpdateIdle()
 	}
 
 	DrawFormatString(0, 30, 0xffffff, "modelPos= %f", m_modelPos.y);
-	DrawFormatString(0, 0, 0xffffff, "pos= %f", m_data.pos.y);
+	DrawFormatString(0, 0, 0xffffff, "pos= %f", m_data.pos.x);
 
 	bool isMoving = false;
 	if (Pad::isPress(PAD_INPUT_RIGHT))
@@ -206,6 +214,42 @@ void Player::UpdateAttack()
 			m_pModel->ChangeAnimation(m_data.animNo, false, false, 1);
 		}
 	}
+}
+
+void Player::OnDamage(int damage)
+{
+	if (m_damageFrame > 0)	return;
+
+	const bool isAlive = m_hp > 0;
+	// 生きていた場合
+	if (isAlive)
+	{
+		// 体力を減らす
+		m_hp -= damage;
+	}
+
+	m_damageFrame = 60 * 2;
+}
+
+void Player::DrawUI()
+{
+	// HPバー表示位置のワールド座標をスクリーン座標に変換する
+	Vec2 screenPos = { 200, 30 };
+
+	if (m_hp > -2)
+	{
+		// 最大HPに対する現在のHPの割合を計算する
+		m_hpRate = static_cast<float>(m_hp) / static_cast<float>(max_hp);
+		// HPバーの長さを計算する
+		m_barWidth = hp_bar_width * m_hpRate;
+	}
+
+	// HPバーの土台(赤)
+	DrawBoxAA(screenPos.x - hp_bar_width / 2, screenPos.y, screenPos.x + hp_bar_width / 2, screenPos.y + hp_bar_height, 0xff0000, true);
+	// 現在のHP(緑)
+	DrawBoxAA(screenPos.x - hp_bar_width / 2, screenPos.y, screenPos.x - hp_bar_width / 2 + m_barWidth, screenPos.y + hp_bar_height, 0x00ff00, true);
+	// 枠線
+	DrawBoxAA(screenPos.x - hp_bar_width / 2, screenPos.y, screenPos.x + hp_bar_width / 2, screenPos.y + hp_bar_height, 0xffffff, false);
 }
 
 // 半径取得

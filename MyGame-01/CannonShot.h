@@ -15,6 +15,9 @@ public:
 	void Update();
 	void Draw();
 
+	float GetColRadius();
+	VECTOR GetPos();
+
 private:
 	std::shared_ptr<Model> m_pModel;
 
