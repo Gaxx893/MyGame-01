@@ -18,9 +18,12 @@ public:
 	void EnterNormal();	// ’ÊíEnter	
 	void UpdateNormal();// ’ÊíUpdate
 	void ExitNormal();	// ’ÊíExit	
-	void EnterDeath();	// ’ÊíEnter
-	void UpdateDeath();	// ’ÊíUpdate
-	void ExitDeath();	// ’ÊíExit
+	void EnterDeath();	// €–SEnter
+	void UpdateDeath();	// €–SUpdate
+	void ExitDeath();	// €–SExit
+	void EnterDamage();	// ”íUŒ‚Enter
+	void UpdateDamage();// ”íUŒ‚Update
+	void ExitDamage();	// ”íUŒ‚Exit
 	void Draw();		// •`‰æ
 	void UpdateIdle();	// ‘Ò‹@
 	void UpdateAttack();// UŒ‚

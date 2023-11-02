@@ -9,7 +9,7 @@
 namespace
 {
 	// ‰~‚Ì”¼Œa
-	constexpr float kRadius = 13.0f;
+	constexpr float kColRadius = 13.0f;
 	// ˆÚ“®•
 	constexpr float kRange = 30.0f;
 
@@ -77,7 +77,7 @@ SceneBase* SceneDebug::Update()
 void SceneDebug::Draw()
 {
 	// ‰~‚ğ•`‰æ
-	DrawCircle(m_pos.x, m_pos.y, kRadius, 0xffffff, FALSE);
+	DrawCircle(m_pos.x, m_pos.y, kColRadius, 0xffffff, FALSE);
 	// ŠeƒV[ƒ“‚Ì–¼‘O•\¦
 	DrawString(200, 100, "SceneTitle", 0xffffff);
 	DrawString(200, 130, "SceneMain", 0xffffff);

@@ -61,11 +61,6 @@ void FieldBase::Update()
 	{
 		model->Update();
 	}
-
-	for (auto& model : m_pCannon)
-	{
-		model->Update();
-	}
 }
 
 void FieldBase::Draw()
@@ -75,12 +70,11 @@ void FieldBase::Draw()
 		model->Draw();
 	}
 
-	for (auto& model : m_pCannon)
+	for (auto& cannon : m_pCannon)
 	{
-		model->Draw();
+		cannon->Draw();
 	}
 }
-
 ////3Dモデルをロード
 //void FieldBase::FirstModelLoad()
 //{
@@ -200,10 +194,7 @@ void FieldBase::ModelLoad(int Model1, int Model2)
 			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
 
 			// 砲台
-			m_pCannon.push_back(std::make_shared<Model>(Model2));
-			m_pCannon.back()->SetUseCollision(true, true);
-			m_pCannon.back()->SetPos(VGet(x, 85.0f, z));
-			m_pCannon.back()->SetRot(VGet(0.0f, DX_PI_F, 0.0f));
+			m_pCannon.push_back(std::make_shared<Cannon>(Model2, VGet(x, 85.0f, z)));
 			continue;
 		}
 

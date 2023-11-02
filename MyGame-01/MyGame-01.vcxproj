@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="FieldBase.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cannon.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FieldBase.h" />
     <ClInclude Include="Player.h" />

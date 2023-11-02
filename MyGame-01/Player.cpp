@@ -10,6 +10,7 @@ namespace
 
 	// アニメーション番号
 	constexpr int kIdleAnimeNo = 3;
+	constexpr int kHitAnimeNo = 2;
 	constexpr int kAttackAnimeNo = 10;
 	constexpr int kRunAnimeNo = 11;
 
@@ -20,9 +21,10 @@ namespace
 	constexpr float kJumpPower = 16.0f;	// ジャンプ力
 	constexpr float kRotSpeed = 0.05f;	// 旋回速度
 	constexpr VECTOR kPlayerVec{ 0.0f,0.0f,-20.0f };	// 移動量
+	constexpr VECTOR kNockBackVec{ 0.0f, 0.0f, -20.0f };	// ノックバックするベクトル
 
 	// 最大HP
-	constexpr int max_hp = 4;
+	constexpr int max_hp = 20;
 	// HPバー
 	constexpr int hp_bar_width = 128;
 	constexpr int hp_bar_height = 20;
@@ -45,14 +47,13 @@ Player::Player() :
 
 	// プレイヤーモデルの初期化
 	m_pModel = std::make_shared<Model>(kPlayerFileName);
-	m_pModel->SetAnimation(m_data.animNo, true, true);
 	m_pModel->SetPos(m_data.pos);
 	m_pModel->SetRot(VGet(0.0f, m_data.angle, 0.0f));
 
 	// ステートマシンの初期化、Entry
 	auto dummy = []() {};
-	auto update = [this]() { UpdateNormal(); };
-	m_stateMachine.AddState(Normal, dummy, update, dummy);
+	m_stateMachine.AddState(Normal, [this]() { EnterNormal(); }, [this]() { UpdateNormal(); }, dummy);
+	m_stateMachine.AddState(Damage, [this]() { EnterDamage(); }, [this]() { UpdateDamage(); }, dummy);
 	m_stateMachine.AddState(Death, dummy, [this]() {UpdateDeath(); }, dummy);
 	m_stateMachine.SetState(Normal);
 }
@@ -71,6 +72,7 @@ void Player::Update()
 // 通常Enter
 void Player::EnterNormal()
 {
+	m_pModel->SetAnimation(m_data.animNo, true, true);
 }
 
 // 通常Update
@@ -111,11 +113,36 @@ void Player::ExitDeath()
 {
 }
 
+void Player::EnterDamage()
+{
+	m_data.animNo = kHitAnimeNo;
+	m_pModel->ChangeAnimation(m_data.animNo, false, true, 2);
+}
+
+void Player::UpdateDamage()
+{
+	// アニメーションアップデート
+	m_pModel->Update();
+
+	if (m_pModel->IsAnimEnd())
+	{
+		m_stateMachine.SetState(Normal);
+	}
+}
+
+void Player::ExitDamage()
+{
+}
+
 // 描画
 void Player::Draw()
 {
+	m_damageFrame--;
+
 	// 描画
 	m_pModel->Draw();
+
+	DrawSphere3D(VGet(m_data.pos.x, m_data.pos.y + 185.0f, m_data.pos.z), kColRadius, 8, 0xff0000, 0xff0000, false);
 }
 
 void Player::UpdateIdle()
@@ -229,6 +256,8 @@ void Player::OnDamage(int damage)
 	}
 
 	m_damageFrame = 60 * 2;
+
+	m_stateMachine.SetState(Damage);
 }
 
 void Player::DrawUI()

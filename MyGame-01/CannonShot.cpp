@@ -9,7 +9,7 @@ namespace
 	// ƒpƒ‰ƒ[ƒ^
 	constexpr int kShotNum = 6;
 	constexpr float kSpeed = 10.0f;
-	constexpr float kRadius = 56.0f;
+	constexpr float kColRadius = 56.0f;
 }
 
 CannonShot::CannonShot(VECTOR cannonBallPos) :
@@ -37,11 +37,13 @@ void CannonShot::Update()
 void CannonShot::Draw()
 {
 	m_pModel->Draw();
+
+	DrawSphere3D(m_pos, kColRadius, 8, 0xff0000, 0xff0000, false);
 }
 
 float CannonShot::GetColRadius()
 {
-	return kRadius;
+	return kColRadius;
 }
 
 VECTOR CannonShot::GetPos()

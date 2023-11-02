@@ -69,19 +69,22 @@ SceneBase* SceneMain::Update()
 	}
 
 	m_frameCount++;
+	m_pField->Update();
 
 	// 砲弾のインスタンス生成
 	if (m_pCannonShot.size() < kShotNum)
 	{
 		if (m_frameCount > kShootingInterval)
 		{
-			m_frameCount = 0;
-			m_pCannonShot.push_back(new CannonShot(m_pField->GetCannon().back()->GetPos()));
+			for (auto& cannon : m_pCannon)
+			{
+				m_frameCount = 0;
+				m_pCannonShot.push_back(new CannonShot(cannon->GetPos()));
+			}
 		}
 	}
 
 	m_pPlayer->Update();
-	m_pField->Update();
 	m_pCamera->Update(m_pPlayer->GetPos(), m_pPlayer->GetAngle());
 	for (auto& shot : m_pCannonShot)
 	{
@@ -130,6 +133,10 @@ void SceneMain::Draw()
 	m_pPlayer->Draw();
 	m_pPlayer->DrawUI();
 	m_pField->Draw();
+	//for (auto& cannon : m_pCannon)
+	//{
+	//	cannon->Draw();
+	//}
 	for (auto& shot : m_pCannonShot)
 	{
 		shot->Draw();
@@ -175,11 +182,12 @@ void SceneMain::CheckCollide()
 	for (auto& shot : m_pCannonShot)
 	{
 		VECTOR playerPos = m_pPlayer->GetPos();		// プレイヤーの現在位置を取得
-		VECTOR shotPos = shot->GetPos();			// 砲弾の現在位置を取得
-		VECTOR toShot = VSub(shotPos, playerPos);	// プレイヤーから砲弾への方向と距離を取得
+		playerPos.y = 185.0f;
+		const VECTOR shotPos = shot->GetPos();			// 砲弾の現在位置を取得
+		const VECTOR toShot = VSub(shotPos, playerPos);	// プレイヤーから砲弾への方向と距離を取得
 
 		// プレイヤーと砲弾の間の距離を取得
-		float distance = VSize(toShot);
+		const float distance = VSize(toShot);
 		// プレイヤーと砲弾の半径を足した合計がプレイヤーと砲弾の半径の合計値より小さい場合
 		if (distance < (m_pPlayer->GetColRadius() + shot->GetColRadius()))
 		{
