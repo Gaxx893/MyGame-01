@@ -161,6 +161,7 @@
     <ClCompile Include="FieldBase.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneDebug.cpp" />
@@ -176,7 +177,9 @@
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FieldBase.h" />
+    <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RotData.h" />
     <ClInclude Include="Scene\SceneMain.h" />
     <ClInclude Include="CannonShot.h" />
     <ClInclude Include="StageData.h" />

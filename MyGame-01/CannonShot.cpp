@@ -12,8 +12,9 @@ namespace
 	constexpr float kColRadius = 56.0f;
 }
 
-CannonShot::CannonShot(VECTOR cannonBallPos) :
-	m_pos(VGet(cannonBallPos.x, cannonBallPos.y + 100.0f, cannonBallPos.z))
+CannonShot::CannonShot(VECTOR pos, VECTOR dir) :
+	m_pos(VGet(pos.x, pos.y + 100.0f, pos.z)),
+	m_dir(dir)
 {
 	m_pModel = std::make_shared<Model>(kCannonBallFileName);
 	m_pModel->SetPos(m_pos);
@@ -29,7 +30,7 @@ void CannonShot::Init()
 
 void CannonShot::Update()
 {
-	m_pos.x -= kSpeed;
+	m_pos = VAdd(m_pos, m_dir);
 
 	m_pModel->SetPos(m_pos);
 }

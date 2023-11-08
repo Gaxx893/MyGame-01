@@ -3,6 +3,7 @@
 
 #include "FieldBase.h"
 #include "Model.h"
+#include "CannonShot.h"
 
 namespace
 {
@@ -27,6 +28,8 @@ namespace
 
 	constexpr float kSpeed = 2.0f;
 
+	// ショットの数
+	constexpr int kShotNum = 6;
 }
 
 FieldBase::FieldBase() :
@@ -60,6 +63,11 @@ void FieldBase::Update()
 	for (auto& model : m_pGrassCube)
 	{
 		model->Update();
+	}
+
+	for (auto& cannon : m_pCannon)
+	{
+		cannon->Update();
 	}
 }
 
@@ -186,17 +194,24 @@ void FieldBase::ModelLoad(int Model1, int Model2)
 			continue;
 		}
 
-		if (m_blockNum[i] == 7)
-		{
-			// 草地面
-			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
-			m_pGrassCube.back()->SetUseCollision(true, true);
-			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+		//if (m_blockNum[i] == 7)
+		//{
+		//	// 草地面
+		//	m_pGrassCube.push_back(std::make_shared<Model>(Model1));
+		//	m_pGrassCube.back()->SetUseCollision(true, true);
+		//	m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
 
-			// 砲台
-			m_pCannon.push_back(std::make_shared<Cannon>(Model2, VGet(x, 85.0f, z)));
-			continue;
-		}
+			//// 砲台
+			//m_pCannon.push_back(std::make_shared<Cannon>(Model2, VGet(x, 85.0f, z)));
+			//if (m_pCannonShot.size() < kShotNum)
+			//{
+			//	for (auto& cannon : m_pCannon)
+			//	{
+			//		m_pCannonShot.push_back(new CannonShot(cannon->GetPos(), ));
+			//	}
+			//}
+			//continue;
+	//	}
 
 		if (m_blockNum[i] == 17)
 		{
@@ -204,6 +219,58 @@ void FieldBase::ModelLoad(int Model1, int Model2)
 			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
 			m_pGrassCube.back()->SetUseCollision(true, true);
 			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));
+			continue;
+		}
+
+		if (m_blockNum[i] == 32)
+		{
+			// 草地面
+			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
+			m_pGrassCube.back()->SetUseCollision(true, true);
+			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+
+			// 砲台
+			m_pCannon.push_back(std::make_shared<Cannon>(Model2, VGet(x, 85.0f, z), Rot::UP));
+			if (m_pCannonShot.size() < kShotNum)
+			{
+				for (auto& cannon : m_pCannon)
+				{
+					m_pCannonShot.push_back(new CannonShot(cannon->GetPos(), cannon->GetDir()));
+				}
+			}
+			continue;
+		}
+		if (m_blockNum[i] == 33)
+		{
+			// 草地面
+			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
+			m_pGrassCube.back()->SetUseCollision(true, true);
+			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+
+			// 砲台
+			m_pCannon.push_back(std::make_shared<Cannon>(Model2, VGet(x, 85.0f, z), Rot::DOWN));
+			continue;
+		}
+		if (m_blockNum[i] == 34)
+		{
+			// 草地面
+			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
+			m_pGrassCube.back()->SetUseCollision(true, true);
+			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+
+			// 砲台
+			m_pCannon.push_back(std::make_shared<Cannon>(Model2, VGet(x, 85.0f, z), Rot::LEFT));
+			continue;
+		}
+		if (m_blockNum[i] == 35)
+		{
+			// 草地面
+			m_pGrassCube.push_back(std::make_shared<Model>(Model1));
+			m_pGrassCube.back()->SetUseCollision(true, true);
+			m_pGrassCube.back()->SetPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+
+			// 砲台
+			m_pCannon.push_back(std::make_shared<Cannon>(Model2, VGet(x, 85.0f, z), Rot::RIGHT));
 			continue;
 		}
 	}

@@ -71,18 +71,18 @@ SceneBase* SceneMain::Update()
 	m_frameCount++;
 	m_pField->Update();
 
-	// 砲弾のインスタンス生成
-	if (m_pCannonShot.size() < kShotNum)
-	{
-		if (m_frameCount > kShootingInterval)
-		{
-			for (auto& cannon : m_pCannon)
-			{
-				m_frameCount = 0;
-				m_pCannonShot.push_back(new CannonShot(cannon->GetPos()));
-			}
-		}
-	}
+	//// 砲弾のインスタンス生成
+	//if (m_pCannonShot.size() < kShotNum)
+	//{
+	//	if (m_frameCount > kShootingInterval)
+	//	{
+	//		for (auto& cannon : m_pCannon)
+	//		{
+	//			m_frameCount = 0;
+	//			m_pCannonShot.push_back(new CannonShot(cannon->GetPos()));
+	//		}
+	//	}
+	//}
 
 	m_pPlayer->Update();
 	m_pCamera->Update(m_pPlayer->GetPos(), m_pPlayer->GetAngle());

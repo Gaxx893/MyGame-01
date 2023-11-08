@@ -4,9 +4,11 @@
 #include<DxLib.h>
 
 #include "Cannon.h"
+#include "RotData.h"
 
 class Model;
 class Cannon;
+class CannonShot;
 
 class FieldBase
 {
@@ -41,6 +43,7 @@ protected:
 	std::vector<std::shared_ptr<Model>> m_pGrassCube;
 //	std::vector<std::shared_ptr<Model>> m_pCannon;
 	std::vector<std::shared_ptr<Cannon>> m_pCannon;
+	std::vector<CannonShot*> m_pCannonShot;	// 砲弾の生ポインタ
 
 	//ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum;

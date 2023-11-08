@@ -180,7 +180,7 @@ void Player::UpdateIdle()
 		m_data.isOnField = false;
 	}
 
-	DrawFormatString(0, 30, 0xffffff, "modelPos= %f", m_modelPos.y);
+	DrawFormatString(0, 30, 0xffffff, "modelPos= %f", m_modelPos.z);
 	DrawFormatString(0, 0, 0xffffff, "pos= %f", m_data.pos.x);
 
 	bool isMoving = false;
