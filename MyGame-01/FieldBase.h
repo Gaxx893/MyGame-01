@@ -52,5 +52,7 @@ protected:
 	int m_stageNum;
 
 	loadData m_data; // ロードデータ
+
+	int m_frameCount;
 };
 

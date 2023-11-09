@@ -22,7 +22,8 @@ private:
 	std::shared_ptr<Model> m_pModel;
 
 	VECTOR m_pos;
-	VECTOR m_dir;
+	VECTOR m_vec;
+	float m_dir;
 	std::vector<CannonShot> m_shots;
 };
 

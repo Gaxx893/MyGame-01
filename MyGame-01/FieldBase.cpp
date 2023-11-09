@@ -30,6 +30,7 @@ namespace
 
 	// ショットの数
 	constexpr int kShotNum = 6;
+	constexpr int kShootingInterval = 60 * 1;
 }
 
 FieldBase::FieldBase() :
@@ -68,6 +69,16 @@ void FieldBase::Update()
 	for (auto& cannon : m_pCannon)
 	{
 		cannon->Update();
+
+		if (cannon->GetShotFlag())
+		{
+			m_pCannonShot.push_back(new CannonShot(cannon->GetPos(), cannon->GetDir()));
+		}
+	}
+
+	for (auto& shot : m_pCannonShot)
+	{
+		shot->Update();
 	}
 }
 
@@ -81,6 +92,11 @@ void FieldBase::Draw()
 	for (auto& cannon : m_pCannon)
 	{
 		cannon->Draw();
+	}
+
+	for (auto& shot : m_pCannonShot)
+	{
+		shot->Draw();
 	}
 }
 ////3Dモデルをロード
@@ -231,13 +247,6 @@ void FieldBase::ModelLoad(int Model1, int Model2)
 
 			// 砲台
 			m_pCannon.push_back(std::make_shared<Cannon>(Model2, VGet(x, 85.0f, z), Rot::UP));
-			if (m_pCannonShot.size() < kShotNum)
-			{
-				for (auto& cannon : m_pCannon)
-				{
-					m_pCannonShot.push_back(new CannonShot(cannon->GetPos(), cannon->GetDir()));
-				}
-			}
 			continue;
 		}
 		if (m_blockNum[i] == 33)
