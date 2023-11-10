@@ -15,17 +15,17 @@ namespace
 
 CannonShot::CannonShot(VECTOR pos, VECTOR dir) :
 	m_pos(VGet(pos.x, pos.y + 100.0f, pos.z)),
-	m_vec(VGet(0,0,0))
+	m_vec(dir)
 {
 	m_pModel = std::make_shared<Model>(kCannonBallFileName);
 	m_pModel->SetPos(m_pos);
 
-	VECTOR vec = VSub(dir,m_pos);
-	float angle = atan2f(vec.x, vec.z);
-	m_vec.x = cosf(angle) * 10;
-	m_vec.z = sinf(angle) * 10;
+	//VECTOR vec = VSub(dir,m_pos);
+	//float angle = atan2f(vec.x, vec.z);
+	//m_vec.x = cosf(angle) * 10;
+	//m_vec.z = sinf(angle) * 10;
 
-	m_dir = atan2f(m_vec.x, m_vec.z);
+	//m_dir = atan2f(m_vec.x, m_vec.z);
 }
 
 CannonShot::~CannonShot()
@@ -38,11 +38,29 @@ void CannonShot::Init()
 
 void CannonShot::Update()
 {
-	m_vec.x = cosf(m_dir) * 10;
-	m_vec.z = sinf(m_dir) * 10;
+	//m_vec.x = cosf(m_dir) * 10;
+	//m_vec.z = sinf(m_dir) * 10;
 
-	m_pos = VAdd(m_pos, m_vec);
+	//m_pos = VAdd(m_pos, m_vec);
 //	m_dir = atan2f(m_vec.x, m_vec.z);
+
+	if (m_vec.z < 0)
+	{
+		m_pos = VSub(m_pos, m_vec);
+	}
+	if(m_vec.z > 0)
+	{
+		m_pos = VAdd(m_pos, m_vec);
+	}
+
+	if (m_vec.x < 0)
+	{
+		m_pos = VSub(m_pos, m_vec);
+	}
+	if (m_vec.x > 0)
+	{
+		m_pos = VAdd(m_pos, m_vec);
+	}
 
 	m_pModel->SetPos(m_pos);
 }

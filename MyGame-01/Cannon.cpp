@@ -20,23 +20,23 @@ Cannon::Cannon(int fileName, VECTOR pos, Rot num) :
 	if (num == UP)
 	{
 		m_pModel->SetRot(VGet(0.0f, 90.0f / 180.0f * DX_PI_F, 0.0f));
-		m_dir.z = m_pos.z - 1;
+		m_dir.z = -1;
 
 	}
 	else if (num == DOWN)
 	{
 		m_pModel->SetRot(VGet(0.0f, -90.0f / 180.0f * DX_PI_F, 0.0f));
-		m_dir.z = m_pos.z + 1;
+		m_dir.z = 1;
 	}
 	else if (num == LEFT)
 	{
 		m_pModel->SetRot(VGet(0.0f, 0.0f / 180.0f * DX_PI_F, 0.0f));
-		m_dir.x = m_pos.x + 1;
+		m_dir.x = 1;
 	}
 	else if (num == RIGHT)
 	{
 		m_pModel->SetRot(VGet(0.0f, -180.0f / 180.0f * DX_PI_F, 0.0f));
-		m_dir.x = m_pos.x + 1;
+		m_dir.x = -1;
 	}
 }
 
